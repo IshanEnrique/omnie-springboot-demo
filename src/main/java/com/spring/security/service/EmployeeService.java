@@ -26,7 +26,7 @@ public class EmployeeService {
 
 	@Transactional
 	public ResponseModel saveEmployee(EmployeeModel req) {
-		Employee reqEntity = req.getEmployeeInstance();
+		Employee reqEntity = req.employeeInstance();
 		Employee savedEntity = empRepo.save(reqEntity);
 		Address savedAddressEntity=addressRepo.save(reqEntity.getAddress());
 		if (null != savedEntity && null != savedAddressEntity)
@@ -39,7 +39,7 @@ public class EmployeeService {
 	}
 
 	public ResponseModel updateEmployee(EmployeeModel req) {
-		Employee reqEntity = req.getEmployeeInstance();
+		Employee reqEntity = req.employeeInstance();
 		Optional<Employee> emOptional = empRepo.findByEmpId(reqEntity.getEmpId());
 		if (emOptional.isPresent()) {
 			reqEntity.setId(emOptional.get().getId());

@@ -3,13 +3,12 @@ server:
 spring:
   application:
     name: security-demo
-
   mvc:
     view:
       prefix: /pages/
       suffix: .jsp
   datasource:
-    url: 'jdbc:h2:mem:devdb'
+    url: jdbc:h2:mem:devdb
   h2:
     console:
       enabled: true
@@ -19,7 +18,8 @@ spring:
       ddl-auto: update
   security:
     user:
-      name: "Rahul"
+      name: Rahul
       password: "12345"
       
-
+      
+      

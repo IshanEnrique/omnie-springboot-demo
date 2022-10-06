@@ -2,12 +2,14 @@ package com.spring.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@Order(-101)
 public class SecuruityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
@@ -15,6 +17,8 @@ public class SecuruityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeHttpRequests().
 
         antMatchers("/h2-console/**").permitAll().
+				antMatchers("/save-emp").permitAll()
+				.
 		antMatchers("/").permitAll().antMatchers("/home").permitAll().antMatchers("/contact")
 				.permitAll().antMatchers("/notices").permitAll().antMatchers("/create-user").permitAll()
 				.antMatchers("/cards").authenticated().antMatchers("/account").authenticated()

@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.spring.security.entity.Address;
 import com.spring.security.entity.Employee;
 
@@ -25,6 +26,7 @@ public class EmployeeModel {
 	@NotNull(message = "Employee Id can't be null or blank")
 	private String empId;
 	@NotBlank(message = "Employee Name can't be blank")
+	@NotNull(message = "Employee name can't be null")
 	private String name;
 	@Pattern(regexp = "^[0-3]?[0-9]/[0-3]?[0-9]/(?:[0-9]{2})?[0-9]{2}$", message = "DOB should be correct.")
 	private String dob;
@@ -39,12 +41,12 @@ public class EmployeeModel {
 	@Pattern(regexp = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$", message = "PIN Code should be correct.")
 	private String pincode;
 
-	public Employee getEmployeeInstance() {
+	public Employee employeeInstance() {
 		Address address = Address.build(null, address1, address2, city, state, pincode);
 		Employee entity = Employee.build(null, empId, name, dob, address);
 		return entity;
 	}
-
+	@JsonIgnoreProperties
 	public static EmployeeModel getEmployeeModelInstance(Employee emp) {
 		if (null == emp || null == emp.getAddress())
 			return null;
