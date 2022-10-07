@@ -1,5 +1,6 @@
 package com.spring.security.repo;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -11,4 +12,6 @@ import com.spring.security.entity.Employee;
 public interface EmployeeRepo extends CrudRepository<Employee, Long> {
 
 	public Optional<Employee> findByEmpId(String empId);
+
+	public List<Employee> findAllByEmpId(String empId);
 }

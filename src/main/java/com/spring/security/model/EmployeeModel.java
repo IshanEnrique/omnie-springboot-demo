@@ -9,7 +9,6 @@ import com.spring.security.entity.Address;
 import com.spring.security.entity.Employee;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +17,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Data
+//@Data
 @AllArgsConstructor(staticName = "build")
 @NoArgsConstructor
 public class EmployeeModel {
@@ -54,5 +53,6 @@ public class EmployeeModel {
 		return EmployeeModel.build(emp.getEmpId(), emp.getName(), emp.getDob(), address.getAddress1(),
 				address.getAddress2(), address.getCity(), address.getState(), address.getPincode());
 	}
+
 
 }

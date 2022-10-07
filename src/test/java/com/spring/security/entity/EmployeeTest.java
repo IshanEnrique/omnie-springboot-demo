@@ -1,16 +1,16 @@
 package com.spring.security.entity;
 
 import javax.persistence.PersistenceException;
-import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
@@ -23,12 +23,15 @@ class EmployeeTest {
 	@Autowired
 	private TestEntityManager entityManager;
 
-	private static EmployeeModel employeeModel;
+	private EmployeeModel employeeModel;
 
+	@Value("${server.port}")
+	private int port;
 
-	@BeforeAll
-	public static void setUp() {
-		employeeModel = EmployeeModel.build("OMS001", "Rahul Kumar", "14/08/1992", "D-108 , Sector -2", null, "Noida",
+	@BeforeEach
+	public void setUp() {
+		System.out.println("Server port :" + port);
+		employeeModel = EmployeeModel.build("OMS01", "Rahul Kumar", "14/08/1992", "D-108 , Sector -2", null, "Noida",
 				"U.P.", "201301");
 
 	}
@@ -52,7 +55,7 @@ class EmployeeTest {
 
 		Assertions.assertTrue(storedEmployee.getId() > 0,
 				"Employee enitiy not saving in DB , enitie's Id is not available");
-		
+
 		Assertions.assertEquals(employeeModel.getEmpId(), storedEmployee.getEmpId(),
 				"Employee Id should be same as given for persistance.");
 		Assertions.assertEquals(employeeModel.getName(), storedEmployee.getName(),
@@ -97,22 +100,33 @@ class EmployeeTest {
 
 //		Arrange
 
-		employeeModel.setName("Rahul Kumar");
-//		employeeModel.setEmpId("OMS002");
+		employeeModel = EmployeeModel.build("OMS01", "Rahul Kumar", "14/08/1992", "D-108 , Sector -2", null, "Noida",
+				"U.P.", "201301");
 		Employee employee = employeeModel.employeeInstance();
 		Address address = employee.getAddress();
+		employeeModel = EmployeeModel.build("OMS01", "Sunil Kumar", "14/08/1992", "D-108 , Sector -2", null, "Noida",
+				"U.P.", "201301");
+		Employee employee1 = employeeModel.employeeInstance();
+		Address address1 = employee1.getAddress();
 
 //		Act
 
 //		Act && Assert
 
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+		Assertions.assertThrows(PersistenceException.class, () -> {
 
+			Employee storedEmployee = entityManager.persist(employee);
+			Address storedAddress = entityManager.persist(address);
+			entityManager.flush();
 
-				Employee storedEmployee = entityManager.persist(employee);
-				Address storedAddress = entityManager.persist(address);
-				entityManager.flush();
-
+			entityManager.clear();
+			Employee storedEmployee1 = entityManager.persist(employee1);
+			Address storedAddress1 = entityManager.persist(address1);
+			entityManager.flush();
+			System.out.println(storedEmployee);
+			System.out.println(storedAddress);
+			System.out.println(storedEmployee1);
+			System.out.println(storedAddress1);
 		}, "Was expecting UniqueConstraintVoilation exception to be thrown.");
 	}
 

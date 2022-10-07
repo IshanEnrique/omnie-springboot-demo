@@ -3,13 +3,11 @@ package com.spring.security.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 
 import org.apache.catalina.security.SecurityConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -20,7 +18,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -99,7 +96,7 @@ class EmployeeControllerTest {
 
 	}
 
-	@Disabled
+//	@Disabled
 	@Test
 	@DisplayName("When Name is not Valid")
 	@Order(2)
@@ -107,6 +104,7 @@ class EmployeeControllerTest {
 		
 		
 //		Arrange
+		employeeModel.setName("");
 		RequestBuilder requestBuilder=MockMvcRequestBuilders.post("/save-emp")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -119,9 +117,82 @@ class EmployeeControllerTest {
 //		ResponseModel res=new ObjectMapper().readValue(responseBody, ResponseModel.class);
 //		Assert
 		
-//		Assertions.assertThrows(IllegalArgumentException.class, ()->{},"Name field seems invalid.");
+//		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+//		}, "Name field seems invalid.");
 		
 		Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), mvcResult.getResponse().getStatus(),"Incorrect Http Status Code returned.");
+	}
+
+	@Test
+	@Order(3)
+	@DisplayName("Should update new details")
+	void testUpdateEmployee_WhenValidDetailsProvided_ThenReturnUpdatedData() throws Exception {
+
+//		Arrange
+
+		employeeModel.setName("Vicky");
+		employeeModel.setAddress1("Pashchimpur Chamav");
+		employeeModel.setAddress2("Tarna Shivpur Varanasi");
+		employeeModel.setCity("Varanasi");
+		employeeModel.setPincode("221003");
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/update-emp").accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(employeeModel));
+
+		when(empService.updateEmployee(any(EmployeeModel.class))).thenReturn(res);
+//		Act
+
+		MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
+		String responseString = mvcResult.getResponse().getContentAsString();
+		ResponseModel returnedResponseModel = new ObjectMapper().readValue(responseString, ResponseModel.class);
+		
+//		Assert
+		Assertions.assertNotNull(returnedResponseModel, "Seems some issue in employee update section");
+		Assertions.assertEquals(employeeModel.getName(), returnedResponseModel.getEmployeeDetails().getName(),
+				"Updating name seems incorrect.");
+		Assertions.assertEquals(employeeModel.getAddress1(), returnedResponseModel.getEmployeeDetails().getAddress1(),
+				"Updating Address1 seems incorrect.");
+		Assertions.assertEquals(employeeModel.getAddress2(), returnedResponseModel.getEmployeeDetails().getAddress2(),
+				"Updating Address2 seems incorrect.");
+		Assertions.assertEquals(employeeModel.getCity(), returnedResponseModel.getEmployeeDetails().getCity(),
+				"Updating City seems incorrect.");
+		Assertions.assertEquals(employeeModel.getPincode(), returnedResponseModel.getEmployeeDetails().getPincode(),
+				"Updating pincode seems incorrect.");
+
+	}
+
+//	@Disabled
+	@Test
+	@Order(4)
+	@DisplayName("Get Employee details by Emp Id")
+	void testUpdateEmployee_WhenValidEmpIdProvided_ThenReturnEmployeeData() throws Exception {
+
+//		Arrange
+
+
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/get-emp/" + employeeModel.getEmpId())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON);
+
+		when(empService.getEmployee(any())).thenReturn(res);
+//		Act
+
+		MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
+		String responseString = mvcResult.getResponse().getContentAsString();
+		ResponseModel returnedResponseModel = new ObjectMapper().readValue(responseString, ResponseModel.class);
+
+//		Assert
+		Assertions.assertNotNull(returnedResponseModel, "Seems some issue in employee update section");
+		Assertions.assertEquals(employeeModel.getName(), returnedResponseModel.getEmployeeDetails().getName(),
+				"Fetching name seems incorrect.");
+		Assertions.assertEquals(employeeModel.getAddress1(), returnedResponseModel.getEmployeeDetails().getAddress1(),
+				"Fetching Address1 seems incorrect.");
+		Assertions.assertEquals(employeeModel.getAddress2(), returnedResponseModel.getEmployeeDetails().getAddress2(),
+				"Fetching Address2 seems incorrect.");
+		Assertions.assertEquals(employeeModel.getCity(), returnedResponseModel.getEmployeeDetails().getCity(),
+				"Fetching City seems incorrect.");
+		Assertions.assertEquals(employeeModel.getPincode(), returnedResponseModel.getEmployeeDetails().getPincode(),
+				"Fetching pincode seems incorrect.");
+
 	}
 
 }
