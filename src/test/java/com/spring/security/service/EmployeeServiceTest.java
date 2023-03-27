@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.spring.security.constants.Constants;
 import com.spring.security.entity.Address;
 import com.spring.security.entity.Employee;
+import com.spring.security.model.Data;
 import com.spring.security.model.EmployeeModel;
 import com.spring.security.model.ResponseModel;
 import com.spring.security.repo.AddressRepo;
@@ -53,7 +54,7 @@ class EmployeeServiceTest {
 				employeeModel.getState(), employeeModel.getPincode());
 		employee = Employee.build(0L, employeeModel.getEmpId(), employeeModel.getName(), employeeModel.getDob(),
 				address);
-		res = ResponseModel.build(Constants.SUCCESS_CODE, Constants.SUCCESS_MSG, employeeModel);
+		res = ResponseModel.build(Constants.SUCCESS_CODE, Constants.SUCCESS_MSG, Data.create(employeeModel));
 
 	}
 
@@ -74,17 +75,17 @@ class EmployeeServiceTest {
 		Assertions.assertNotNull(returnedResponse, "Save method should return response model");
 		Assertions.assertEquals(Constants.SUCCESS_CODE, returnedResponse.getStatus(),
 				"Save method returned incorrect response model status code");
-		Assertions.assertNotNull(returnedResponse.getEmployeeDetails(),
+		Assertions.assertNotNull(returnedResponse.getData().getEmployeeDetails(),
 				"Save method returned incorrect Employee model details");
-		Assertions.assertEquals(employeeModel.getEmpId(), returnedResponse.getEmployeeDetails().getEmpId(),
+		Assertions.assertEquals(employeeModel.getEmpId(), returnedResponse.getData().getEmployeeDetails().getEmpId(),
 				"Saved employee's emp id seems to be incorrect");
-		Assertions.assertEquals(employeeModel.getDob(), returnedResponse.getEmployeeDetails().getDob(),
+		Assertions.assertEquals(employeeModel.getDob(), returnedResponse.getData().getEmployeeDetails().getDob(),
 				"Saved employee's DOB seems to be incorrect");
-		Assertions.assertEquals(employeeModel.getAddress1(), returnedResponse.getEmployeeDetails().getAddress1(),
+		Assertions.assertEquals(employeeModel.getAddress1(), returnedResponse.getData().getEmployeeDetails().getAddress1(),
 				"Saved employee's Address line 1 seems to be incorrect");
-		Assertions.assertEquals(employeeModel.getAddress2(), returnedResponse.getEmployeeDetails().getAddress2(),
+		Assertions.assertEquals(employeeModel.getAddress2(), returnedResponse.getData().getEmployeeDetails().getAddress2(),
 				"Saved employee's Address line 2 seems to be incorrect");
-		Assertions.assertEquals(employeeModel.getPincode(), returnedResponse.getEmployeeDetails().getPincode(),
+		Assertions.assertEquals(employeeModel.getPincode(), returnedResponse.getData().getEmployeeDetails().getPincode(),
 				"Saved employee's postal code seems to be incorrect");
 	}
 
@@ -104,17 +105,17 @@ class EmployeeServiceTest {
 		Assertions.assertNotNull(returnedResponse, "Save method should return response model");
 		Assertions.assertEquals(Constants.SUCCESS_CODE, returnedResponse.getStatus(),
 				"Save method returned incorrect response model status code");
-		Assertions.assertNotNull(returnedResponse.getEmployeeDetails(),
+		Assertions.assertNotNull(returnedResponse.getData().getEmployeeDetails(),
 				"Save method returned incorrect Employee model details");
-		Assertions.assertEquals(employeeModel.getEmpId(), returnedResponse.getEmployeeDetails().getEmpId(),
+		Assertions.assertEquals(employeeModel.getEmpId(), returnedResponse.getData().getEmployeeDetails().getEmpId(),
 				"Saved employee's emp id seems to be incorrect");
-		Assertions.assertEquals(employeeModel.getDob(), returnedResponse.getEmployeeDetails().getDob(),
+		Assertions.assertEquals(employeeModel.getDob(), returnedResponse.getData().getEmployeeDetails().getDob(),
 				"Saved employee's DOB seems to be incorrect");
-		Assertions.assertEquals(employeeModel.getAddress1(), returnedResponse.getEmployeeDetails().getAddress1(),
+		Assertions.assertEquals(employeeModel.getAddress1(), returnedResponse.getData().getEmployeeDetails().getAddress1(),
 				"Saved employee's Address line 1 seems to be incorrect");
-		Assertions.assertEquals(employeeModel.getAddress2(), returnedResponse.getEmployeeDetails().getAddress2(),
+		Assertions.assertEquals(employeeModel.getAddress2(), returnedResponse.getData().getEmployeeDetails().getAddress2(),
 				"Saved employee's Address line 2 seems to be incorrect");
-		Assertions.assertEquals(employeeModel.getPincode(), returnedResponse.getEmployeeDetails().getPincode(),
+		Assertions.assertEquals(employeeModel.getPincode(), returnedResponse.getData().getEmployeeDetails().getPincode(),
 				"Saved employee's postal code seems to be incorrect");
 	}
 

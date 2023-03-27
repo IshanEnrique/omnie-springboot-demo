@@ -15,14 +15,13 @@ public class SecuruityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests().
-
-        antMatchers("/h2-console/**").permitAll().
-				antMatchers("/save-emp").permitAll()
-				.
-		antMatchers("/").permitAll().antMatchers("/home").permitAll().antMatchers("/contact")
-				.permitAll().antMatchers("/notices").permitAll().antMatchers("/create-user").permitAll()
-				.antMatchers("/cards").authenticated().antMatchers("/account").authenticated()
-		.anyRequest().authenticated()
+				antMatchers(WHITELIST).permitAll().
+//        antMatchers("/h2-console/**").permitAll().
+//				antMatchers("/save-emp").permitAll()
+//		antMatchers("/").permitAll().antMatchers("/home").permitAll().antMatchers("/contact").permitAll().
+//				antMatchers("/notices").permitAll().antMatchers("/create-user").permitAll()
+//				.antMatchers("/cards").authenticated().antMatchers("/account").authenticated().
+				anyRequest().authenticated()
 		  .and().formLogin().and() .httpBasic()
 		.and().
 		csrf().disable();
@@ -43,5 +42,15 @@ public class SecuruityConfig extends WebSecurityConfigurerAdapter {
 		return NoOpPasswordEncoder.getInstance();
 		
 	}
+
+	private static final String[] WHITELIST = {
+
+			"/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html",
+			"/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**"
+//			, "/save-emp", "/contact"
+			, "/auth-gen/**"
+			, "/webjars/**", "/", "/home"
+
+	};
 
 }

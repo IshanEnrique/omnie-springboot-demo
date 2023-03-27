@@ -38,6 +38,12 @@ public class EmployeeController {
 		ResponseModel res=empService.getEmployee(empId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+
+	@GetMapping("get-emp")
+	public ResponseEntity<ResponseModel> getAllEmployee() {
+		ResponseModel res = empService.getAllEmployee();
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 	
 
 	

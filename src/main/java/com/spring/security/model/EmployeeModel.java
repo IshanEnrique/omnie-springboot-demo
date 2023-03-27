@@ -1,5 +1,8 @@
 package com.spring.security.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -54,5 +57,18 @@ public class EmployeeModel {
 				address.getAddress2(), address.getCity(), address.getState(), address.getPincode());
 	}
 
+	@JsonIgnoreProperties
+	public static List<EmployeeModel> getEmployeeModelIListnstance(List<Employee> empList) {
+		if (null == empList || empList.isEmpty())
+			return null;
+		List<EmployeeModel> empModelList = new ArrayList<>();
+		empList.forEach(emp -> {
+
+			Address address = emp.getAddress();
+			empModelList.add(EmployeeModel.build(emp.getEmpId(), emp.getName(), emp.getDob(), address.getAddress1(),
+					address.getAddress2(), address.getCity(), address.getState(), address.getPincode()));
+		});
+		return empModelList;
+	}
 
 }

@@ -13,7 +13,7 @@ public class ResponseModel {
 
 	public String status;
 	public String message;
-	public EmployeeModel employeeDetails;
-	
+	public Data data;
+
 
 }

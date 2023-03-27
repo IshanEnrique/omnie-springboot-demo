@@ -32,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.security.constants.Constants;
 import com.spring.security.entity.Address;
 import com.spring.security.entity.Employee;
+import com.spring.security.model.Data;
 import com.spring.security.model.EmployeeModel;
 import com.spring.security.model.ResponseModel;
 import com.spring.security.service.EmployeeService;
@@ -67,7 +68,7 @@ class EmployeeControllerTest {
 				employeeModel.getState(), employeeModel.getPincode());
 		employee = Employee.build(0L, employeeModel.getEmpId(), employeeModel.getName(), employeeModel.getDob(),
 				address);
-		res = ResponseModel.build(Constants.SUCCESS_CODE, Constants.SUCCESS_MSG, employeeModel);
+		res = ResponseModel.build(Constants.SUCCESS_CODE, Constants.SUCCESS_MSG, Data.create(employeeModel));
 	}
 
 //	@Disabled
@@ -89,10 +90,11 @@ class EmployeeControllerTest {
 		responseModel = new ObjectMapper().readValue(responseBodyAsString, ResponseModel.class);
 
 //		Assert
-		assertNotNull(responseModel.getEmployeeDetails(), "New employee created details can not be null.");
-		assertEquals(employeeModel.getName(), responseModel.getEmployeeDetails().getName(),
+		assertNotNull(responseModel.getData().getEmployeeDetails(), "New employee created details can not be null.");
+		assertEquals(employeeModel.getName(), responseModel.getData().getEmployeeDetails().getName(),
 				"The returned user's Name is most likely incorrect");
-		assertNotNull(responseModel.getEmployeeDetails().getEmpId(), "The returned employye's code should be created.");
+		assertNotNull(responseModel.getData().getEmployeeDetails().getEmpId(),
+				"The returned employye's code should be created.");
 
 	}
 
@@ -147,15 +149,18 @@ class EmployeeControllerTest {
 		
 //		Assert
 		Assertions.assertNotNull(returnedResponseModel, "Seems some issue in employee update section");
-		Assertions.assertEquals(employeeModel.getName(), returnedResponseModel.getEmployeeDetails().getName(),
+		Assertions.assertEquals(employeeModel.getName(), returnedResponseModel.getData().getEmployeeDetails().getName(),
 				"Updating name seems incorrect.");
-		Assertions.assertEquals(employeeModel.getAddress1(), returnedResponseModel.getEmployeeDetails().getAddress1(),
+		Assertions.assertEquals(employeeModel.getAddress1(),
+				returnedResponseModel.getData().getEmployeeDetails().getAddress1(),
 				"Updating Address1 seems incorrect.");
-		Assertions.assertEquals(employeeModel.getAddress2(), returnedResponseModel.getEmployeeDetails().getAddress2(),
+		Assertions.assertEquals(employeeModel.getAddress2(),
+				returnedResponseModel.getData().getEmployeeDetails().getAddress2(),
 				"Updating Address2 seems incorrect.");
-		Assertions.assertEquals(employeeModel.getCity(), returnedResponseModel.getEmployeeDetails().getCity(),
+		Assertions.assertEquals(employeeModel.getCity(), returnedResponseModel.getData().getEmployeeDetails().getCity(),
 				"Updating City seems incorrect.");
-		Assertions.assertEquals(employeeModel.getPincode(), returnedResponseModel.getEmployeeDetails().getPincode(),
+		Assertions.assertEquals(employeeModel.getPincode(),
+				returnedResponseModel.getData().getEmployeeDetails().getPincode(),
 				"Updating pincode seems incorrect.");
 
 	}
@@ -182,15 +187,18 @@ class EmployeeControllerTest {
 
 //		Assert
 		Assertions.assertNotNull(returnedResponseModel, "Seems some issue in employee update section");
-		Assertions.assertEquals(employeeModel.getName(), returnedResponseModel.getEmployeeDetails().getName(),
+		Assertions.assertEquals(employeeModel.getName(), returnedResponseModel.getData().getEmployeeDetails().getName(),
 				"Fetching name seems incorrect.");
-		Assertions.assertEquals(employeeModel.getAddress1(), returnedResponseModel.getEmployeeDetails().getAddress1(),
+		Assertions.assertEquals(employeeModel.getAddress1(),
+				returnedResponseModel.getData().getEmployeeDetails().getAddress1(),
 				"Fetching Address1 seems incorrect.");
-		Assertions.assertEquals(employeeModel.getAddress2(), returnedResponseModel.getEmployeeDetails().getAddress2(),
+		Assertions.assertEquals(employeeModel.getAddress2(),
+				returnedResponseModel.getData().getEmployeeDetails().getAddress2(),
 				"Fetching Address2 seems incorrect.");
-		Assertions.assertEquals(employeeModel.getCity(), returnedResponseModel.getEmployeeDetails().getCity(),
+		Assertions.assertEquals(employeeModel.getCity(), returnedResponseModel.getData().getEmployeeDetails().getCity(),
 				"Fetching City seems incorrect.");
-		Assertions.assertEquals(employeeModel.getPincode(), returnedResponseModel.getEmployeeDetails().getPincode(),
+		Assertions.assertEquals(employeeModel.getPincode(),
+				returnedResponseModel.getData().getEmployeeDetails().getPincode(),
 				"Fetching pincode seems incorrect.");
 
 	}
