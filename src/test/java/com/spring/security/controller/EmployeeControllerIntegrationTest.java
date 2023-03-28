@@ -4,21 +4,23 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 
 import com.spring.security.constants.Constants;
 import com.spring.security.entity.Address;
@@ -27,12 +29,15 @@ import com.spring.security.model.Data;
 import com.spring.security.model.EmployeeModel;
 import com.spring.security.model.ResponseModel;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = SecurityConfigTest.class)
+
 //@TestPropertySource(locations = "application-test.yml")
 @TestInstance(Lifecycle.PER_CLASS)
+@AutoConfigureMockMvc(addFilters = false)
 public class EmployeeControllerIntegrationTest {
 
-
+	@LocalServerPort
+	int randomServerPort;
 	@Value("${spring.security.user.name}")
 	private String securityUsername;
 	@Value("${spring.security.user.password}")
@@ -48,7 +53,7 @@ public class EmployeeControllerIntegrationTest {
 	private ResponseModel res;
 
 	private HttpHeaders headers;
-
+	private String baseUrl;
 	@Autowired
 	private TestRestTemplate testRestTemplate;
 
@@ -68,18 +73,21 @@ public class EmployeeControllerIntegrationTest {
 		headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		baseUrl = "http://localhost:" + randomServerPort;
 	}
 
-	@Disabled
 	@Test
+	@WithAnonymousUser
 	public void testSaveEmployee_WhenValidEmployeeDetailsProvided_ThenReturnEmployeeDetails() {
 
 //		Arrange
 		HttpEntity<EmployeeModel> httpEntity = new HttpEntity<EmployeeModel>(employeeModel, headers);
 
 //		Act
+		System.out.println("BaseURL " + baseUrl);
 
-		ResponseEntity<ResponseModel> createdEmployeeEntity = testRestTemplate.postForEntity("/save-emp", httpEntity,
+		ResponseEntity<ResponseModel> createdEmployeeEntity = testRestTemplate.postForEntity(baseUrl + "/save-emp",
+				httpEntity,
 				ResponseModel.class);
 		
 		res=createdEmployeeEntity.getBody();

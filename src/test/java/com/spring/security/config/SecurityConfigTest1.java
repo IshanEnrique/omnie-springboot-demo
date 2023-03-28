@@ -7,17 +7,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @TestConfiguration
 @Order(1)
-class SecuruityConfigTest extends WebSecurityConfigurerAdapter{
+class SecurityConfigTest1 extends WebSecurityConfigurerAdapter {
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		// TODO Auto-generated method stub
-		http.csrf().disable()
-		.authorizeHttpRequests()
-		.anyRequest().permitAll();
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		// Disable CSRF
+		httpSecurity.csrf().disable()
+				// Permit all requests without authentication
+				.authorizeRequests().anyRequest().permitAll();
 	}
-
-
-
 
 }
