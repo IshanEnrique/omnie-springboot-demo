@@ -1,5 +1,9 @@
+local:
+ server:
+  port: 9012
+
 server:
-  port: 9090
+  port: 9010
 spring:
   application:
     name: security-demo
@@ -19,7 +23,7 @@ spring:
       ddl-auto: update
   security:
     user:
-      name: "Rahul"
-      password: "12345"
+      name: "rahul@bharatkadam.com"
+      password: "54321"
       
 

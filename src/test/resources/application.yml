@@ -1,5 +1,9 @@
-server:
+local:
+ server:
   port: 9012
+  
+server:
+  port: 9010
 spring:
   application:
     name: security-demo
@@ -19,8 +23,8 @@ spring:
        
   security:
     user:
-      name: Rahul
-      password: "12345"
+      name: rahul@bharatkadam.com
+      password: 54321
       
       
       

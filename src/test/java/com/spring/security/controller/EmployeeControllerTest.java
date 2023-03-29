@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import org.apache.catalina.security.SecurityConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -38,7 +38,7 @@ import com.spring.security.model.ResponseModel;
 import com.spring.security.service.EmployeeService;
 
 @AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(controllers = EmployeeController.class, excludeAutoConfiguration = SecurityConfig.class)
+@WebMvcTest(controllers = EmployeeController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EmployeeControllerTest {
@@ -90,6 +90,7 @@ class EmployeeControllerTest {
 		responseModel = new ObjectMapper().readValue(responseBodyAsString, ResponseModel.class);
 
 //		Assert
+		assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
 		assertNotNull(responseModel.getData().getEmployeeDetails(), "New employee created details can not be null.");
 		assertEquals(employeeModel.getName(), responseModel.getData().getEmployeeDetails().getName(),
 				"The returned user's Name is most likely incorrect");
